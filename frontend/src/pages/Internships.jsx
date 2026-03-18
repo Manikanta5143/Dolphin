@@ -1,0 +1,965 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { 
+  MagnifyingGlassIcon,
+  FunnelIcon,
+  BookmarkIcon,
+  ClockIcon,
+  BuildingOfficeIcon,
+  CurrencyDollarIcon,
+  AcademicCapIcon,
+  MapPinIcon,
+  GlobeAltIcon,
+  ComputerDesktopIcon,
+  CalendarIcon,
+  TagIcon,
+  StarIcon,
+  BriefcaseIcon,
+  CogIcon,
+  FireIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline';
+
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-hot-toast';
+import LoadingSkeleton, { EventCardSkeleton } from '../components/LoadingSkeleton';
+
+import { 
+  FaBell, 
+  FaFilter, 
+  FaSearch, 
+  FaTrash, 
+  FaCheck, 
+  FaExclamation, 
+  FaInfoCircle, 
+  FaTrophy, 
+  FaUsers, 
+  FaCalendar, 
+  FaRegBookmark,
+  FaBookmark,
+  FaBuilding,
+  FaClock,
+  FaMoneyBillWave
+} from 'react-icons/fa';
+
+import { MdAccessTime, MdComputer, MdLocationOn, MdWork } from 'react-icons/md';
+
+
+const Internships = () => {
+  const { user } = useAuth();
+  const [internships, setInternships] = useState([]);
+  const [filteredInternships, setFilteredInternships] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filters, setFilters] = useState({
+    companies: [],
+    modes: [],
+    types: [],
+    sectors: [],
+    durations: [],
+    skills: []
+  });
+  const [selectedFilters, setSelectedFilters] = useState({
+    companies: [],
+    modes: [],
+    types: [],
+    sectors: [],
+    durations: [],
+    skills: []
+  });
+
+  // Sample internship data
+  const sampleInternships = [
+    {
+      id: 1,
+      title: "Software Engineering Intern",
+      company: "Google",
+      mode: "hybrid",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-03-15",
+      stipend: "$8000/month",
+      location: "Mountain View, CA",
+      skills: ["JavaScript", "React", "Node.js", "Python"],
+      description: "Join our engineering team to build scalable applications that impact billions of users worldwide.",
+      link: "https://careers.google.com/jobs/results/",
+      isBookmarked: false,
+      badges: ["Popular", "Remote Friendly"],
+      isUrgent: false
+    },
+    {
+      id: 2,
+      title: "Data Science Intern",
+      company: "Microsoft",
+      mode: "remote",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-02-28",
+      stipend: "$7500/month",
+      location: "Remote",
+      skills: ["Python", "Machine Learning", "SQL", "Statistics"],
+      description: "Work on cutting-edge AI and machine learning projects that shape the future of technology.",
+      link: "https://careers.microsoft.com/us/en/search-results",
+      isBookmarked: false,
+      badges: ["Urgent", "Popular"],
+      isUrgent: true
+    },
+    {
+      id: 3,
+      title: "Frontend Development Intern",
+      company: "Meta",
+      mode: "hybrid",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-04-10",
+      stipend: "$7000/month",
+      location: "Menlo Park, CA",
+      skills: ["React", "JavaScript", "CSS", "TypeScript"],
+      description: "Build user interfaces for products used by billions of people around the world.",
+      link: "https://www.metacareers.com/jobs/",
+      isBookmarked: false,
+      badges: ["Popular"],
+      isUrgent: false
+    },
+    {
+      id: 4,
+      title: "Cloud Engineering Intern",
+      company: "Amazon Web Services",
+      mode: "remote",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-03-20",
+      stipend: "$6500/month",
+      location: "Remote",
+      skills: ["AWS", "Python", "Docker", "Kubernetes"],
+      description: "Help build and maintain the world's most comprehensive cloud computing platform.",
+      link: "https://www.amazon.jobs/en/teams/internships-for-students",
+      isBookmarked: false,
+      badges: ["Remote Friendly"],
+      isUrgent: false
+    },
+    {
+      id: 5,
+      title: "AI Research Intern",
+      company: "OpenAI",
+      mode: "offline",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-02-25",
+      stipend: "$8000/month",
+      location: "San Francisco, CA",
+      skills: ["Python", "Machine Learning", "Deep Learning", "Research"],
+      description: "Contribute to cutting-edge AI research and help develop the next generation of AI systems.",
+      link: "https://openai.com/careers",
+      isBookmarked: false,
+      badges: ["Urgent", "Research"],
+      isUrgent: true
+    },
+    {
+      id: 6,
+      title: "Cybersecurity Intern",
+      company: "CrowdStrike",
+      mode: "hybrid",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-04-15",
+      stipend: "$6000/month",
+      location: "Sunnyvale, CA",
+      skills: ["Cybersecurity", "Python", "Network Security", "Malware Analysis"],
+      description: "Help protect organizations from cyber threats and develop security solutions.",
+      link: "https://www.crowdstrike.com/careers/",
+      isBookmarked: false,
+      badges: ["Security"],
+      isUrgent: false
+    },
+    {
+      id: 7,
+      title: "Product Management Intern",
+      company: "Netflix",
+      mode: "offline",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-03-30",
+      stipend: "$7000/month",
+      location: "Los Gatos, CA",
+      skills: ["Product Management", "Data Analysis", "User Research", "Strategy"],
+      description: "Help shape the future of entertainment by working on product strategy and user experience.",
+      link: "https://jobs.netflix.com/",
+      isBookmarked: false,
+      badges: ["Popular"],
+      isUrgent: false
+    },
+    {
+      id: 8,
+      title: "Government Technology Intern",
+      company: "U.S. Digital Service",
+      mode: "offline",
+      type: "paid",
+      sector: "government",
+      duration: "3-6 months",
+      deadline: "2024-04-20",
+      stipend: "$5000/month",
+      location: "Washington, DC",
+      skills: ["Software Development", "Public Policy", "User-Centered Design"],
+      description: "Help improve government services through technology and design thinking.",
+      link: "https://www.usds.gov/join",
+      isBookmarked: false,
+      badges: ["Government", "Public Service"],
+      isUrgent: false
+    },
+    {
+      id: 9,
+      title: "NGO Technology Intern",
+      company: "UNICEF Innovation",
+      mode: "remote",
+      type: "unpaid",
+      sector: "ngo",
+      duration: "1-3 months",
+      deadline: "2024-05-10",
+      stipend: "Unpaid",
+      location: "Remote",
+      skills: ["Technology", "Social Impact", "Project Management"],
+      description: "Use technology to create positive social impact and help children worldwide.",
+      link: "https://www.unicef.org/innovation/",
+      isBookmarked: false,
+      badges: ["Social Impact", "Remote Friendly"],
+      isUrgent: false
+    },
+    {
+      id: 10,
+      title: "Startup Engineering Intern",
+      company: "Stripe",
+      mode: "hybrid",
+      type: "paid",
+      sector: "private",
+      duration: "3-6 months",
+      deadline: "2024-03-10",
+      stipend: "$7500/month",
+      location: "San Francisco, CA",
+      skills: ["Full Stack Development", "API Design", "Payment Systems"],
+      description: "Help build the economic infrastructure for the internet at a fast-growing fintech company.",
+      link: "https://stripe.com/jobs",
+      isBookmarked: false,
+      badges: ["Urgent", "Fintech"],
+      isUrgent: true
+    }
+  ];
+
+  // Popular skills and companies for suggestions
+  const popularSkills = ["JavaScript", "Python", "React", "Node.js", "Machine Learning", "Data Science", "SQL", "Java", "C++", "AWS"];
+  const popularCompanies = ["Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix", "Twitter", "Uber", "Airbnb", "Stripe"];
+
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      setInternships(sampleInternships);
+      setFilteredInternships(sampleInternships);
+      setLoading(false);
+      
+      // Extract unique filter options
+      const companies = [...new Set(sampleInternships.map(i => i.company))];
+      const modes = [...new Set(sampleInternships.map(i => i.mode))];
+      const types = [...new Set(sampleInternships.map(i => i.type))];
+      const sectors = [...new Set(sampleInternships.map(i => i.sector))];
+      const durations = [...new Set(sampleInternships.map(i => i.duration))];
+      const allSkills = sampleInternships.flatMap(i => i.skills);
+      const skills = [...new Set(allSkills)];
+      
+      setFilters({
+        companies,
+        modes,
+        types,
+        sectors,
+        durations,
+        skills
+      });
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchTerm, selectedFilters, internships]);
+
+  // Generate search suggestions
+  useEffect(() => {
+    if (searchTerm.length > 0) {
+      const allSuggestions = [
+        ...popularSkills.filter(skill => 
+          skill.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+        ...popularCompanies.filter(company => 
+          company.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+        ...sampleInternships.filter(internship =>
+          internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          internship.company.toLowerCase().includes(searchTerm.toLowerCase())
+        ).map(i => i.title)
+      ];
+      
+      setSuggestions([...new Set(allSuggestions)].slice(0, 8));
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  }, [searchTerm]);
+
+  const applyFilters = () => {
+    let filtered = [...internships];
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(internship =>
+        internship.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        internship.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        internship.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+    }
+
+    // Company filter
+    if (selectedFilters.companies.length > 0) {
+      filtered = filtered.filter(internship =>
+        selectedFilters.companies.includes(internship.company)
+      );
+    }
+
+    // Mode filter
+    if (selectedFilters.modes.length > 0) {
+      filtered = filtered.filter(internship =>
+        selectedFilters.modes.includes(internship.mode)
+      );
+    }
+
+    // Type filter
+    if (selectedFilters.types.length > 0) {
+      filtered = filtered.filter(internship =>
+        selectedFilters.types.includes(internship.type)
+      );
+    }
+
+    // Sector filter
+    if (selectedFilters.sectors.length > 0) {
+      filtered = filtered.filter(internship =>
+        selectedFilters.sectors.includes(internship.sector)
+      );
+    }
+
+    // Duration filter
+    if (selectedFilters.durations.length > 0) {
+      filtered = filtered.filter(internship =>
+        selectedFilters.durations.includes(internship.duration)
+      );
+    }
+
+    // Skills filter
+    if (selectedFilters.skills.length > 0) {
+      filtered = filtered.filter(internship =>
+        internship.skills.some(skill => selectedFilters.skills.includes(skill))
+      );
+    }
+
+    setFilteredInternships(filtered);
+  };
+
+  const toggleFilter = (filterType, value) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType].includes(value)
+        ? prev[filterType].filter(item => item !== value)
+        : [...prev[filterType], value]
+    }));
+  };
+
+  const clearAllFilters = () => {
+    setSelectedFilters({
+      companies: [],
+      modes: [],
+      types: [],
+      sectors: [],
+      durations: [],
+      skills: []
+    });
+    setSearchTerm('');
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setSearchTerm(suggestion);
+    setShowSuggestions(false);
+  };
+
+  const toggleBookmark = async (internshipId) => {
+    if (!user) {
+      toast.error('Please login to bookmark internships');
+      return;
+    }
+
+    try {
+      const internship = internships.find(i => i.id === internshipId);
+      if (internship.isBookmarked) {
+        // Remove bookmark
+        setInternships(prev => prev.map(i => 
+          i.id === internshipId ? { ...i, isBookmarked: false } : i
+        ));
+        toast.success('Bookmark removed');
+      } else {
+        // Add bookmark
+        setInternships(prev => prev.map(i => 
+          i.id === internshipId ? { ...i, isBookmarked: true } : i
+        ));
+        toast.success('Internship bookmarked');
+      }
+    } catch (error) {
+      console.error('Error toggling bookmark:', error);
+      toast.error('Failed to update bookmark');
+    }
+  };
+
+  const getDaysUntilDeadline = (deadline) => {
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+    const diffTime = deadlineDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const getTypeColor = (type) => {
+    switch (type) {
+      case 'paid': return 'bg-green-100 text-green-800';
+      case 'unpaid': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getSectorColor = (sector) => {
+    switch (sector) {
+      case 'private': return 'bg-blue-100 text-blue-800';
+      case 'government': return 'bg-purple-100 text-purple-800';
+      case 'ngo': return 'bg-orange-100 text-orange-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getModeColor = (mode) => {
+    switch (mode) {
+      case 'remote': return 'bg-green-100 text-green-800';
+      case 'offline': return 'bg-blue-100 text-blue-800';
+      case 'hybrid': return 'bg-yellow-100 text-yellow-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getUrgentInternships = () => {
+    return filteredInternships.filter(internship => {
+      const daysUntilDeadline = getDaysUntilDeadline(internship.deadline);
+      return daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6">
+            {/* Header Skeleton */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <div className="animate-pulse">
+                <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4" />
+                <div className="h-4 w-96 bg-gray-200 dark:bg-gray-700 rounded" />
+              </div>
+            </div>
+            
+            {/* Search and Filters Skeleton */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+              <div className="animate-pulse">
+                <div className="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded mb-4" />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div key={index} className="h-10 bg-gray-200 dark:bg-gray-700 rounded" />
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            {/* Internships Grid Skeleton */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <EventCardSkeleton key={index} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const urgentInternships = getUrgentInternships();
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center space-x-3">
+              <BriefcaseIcon className="h-8 w-8 text-white" />
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Internships</h1>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">Find your perfect internship opportunity</p>
+              </div>
+            </div>
+            <div className="mt-4 lg:mt-0">
+              <div className="text-right">
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{filteredInternships.length}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Available Internships</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        {/* Search and Filters */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8"
+        >
+          {/* Search Bar */}
+          <div className="relative mb-6">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search internships by title, company, or skills..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={() => setShowSuggestions(true)}
+              className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+            />
+            
+            {/* Typeahead Suggestions */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
+                {suggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 focus:bg-gray-100 dark:focus:bg-gray-600 transition-colors"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Filter Toggle */}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+              <FunnelIcon className="w-5 h-5 mr-2" />
+              Filters
+            </h3>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+            >
+              {showFilters ? 'Hide Filters' : 'Show Filters'}
+            </button>
+          </div>
+
+          {/* Active Filters */}
+          {(Object.values(selectedFilters).some(f => f.length > 0) || searchTerm) && (
+            <div className="mb-4">
+              <div className="flex flex-wrap gap-2 items-center">
+                <span className="text-sm font-medium text-gray-700">Active filters:</span>
+                {searchTerm && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                    Search: "{searchTerm}"
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="ml-2 text-blue-600 hover:text-blue-800"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {Object.entries(selectedFilters).map(([filterType, values]) =>
+                  values.map(value => (
+                    <span key={`${filterType}-${value}`} className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800">
+                      {filterType}: {value}
+                      <button
+                        onClick={() => toggleFilter(filterType, value)}
+                        className="ml-2 text-gray-600 hover:text-gray-800"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))
+                )}
+                <button
+                  onClick={clearAllFilters}
+                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Clear all
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Filter Panel */}
+          {showFilters && (
+            <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Companies */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">Companies</h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {filters.companies.map(company => (
+                      <label key={company} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.companies.includes(company)}
+                          onChange={() => toggleFilter('companies', company)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">{company}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mode */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">Mode</h3>
+                  <div className="space-y-2">
+                    {filters.modes.map(mode => (
+                      <label key={mode} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.modes.includes(mode)}
+                          onChange={() => toggleFilter('modes', mode)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700 capitalize">{mode}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Type */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">Type</h3>
+                  <div className="space-y-2">
+                    {filters.types.map(type => (
+                      <label key={type} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.types.includes(type)}
+                          onChange={() => toggleFilter('types', type)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700 capitalize">{type}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Sector */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">Sector</h3>
+                  <div className="space-y-2">
+                    {filters.sectors.map(sector => (
+                      <label key={sector} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.sectors.includes(sector)}
+                          onChange={() => toggleFilter('sectors', sector)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700 capitalize">{sector}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Duration */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">Duration</h3>
+                  <div className="space-y-2">
+                    {filters.durations.map(duration => (
+                      <label key={duration} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.durations.includes(duration)}
+                          onChange={() => toggleFilter('durations', duration)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">{duration}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Skills */}
+                <div>
+                  <h3 className="text-sm font-medium text-gray-900 mb-3">Skills</h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {filters.skills.map(skill => (
+                      <label key={skill} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={selectedFilters.skills.includes(skill)}
+                          onChange={() => toggleFilter('skills', skill)}
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">{skill}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Urgent Internships Section */}
+        {urgentInternships.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+              <FaClock className="mr-2 text-red-500" />
+              Deadline Approaching
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {urgentInternships.slice(0, 3).map(internship => {
+                const daysUntilDeadline = getDaysUntilDeadline(internship.deadline);
+                return (
+                  <div key={internship.id} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-medium text-gray-900 text-sm line-clamp-2">
+                        {internship.title}
+                      </h3>
+                      <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                        {daysUntilDeadline} day{daysUntilDeadline !== 1 ? 's' : ''} left
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-2">{internship.company}</p>
+                    <a
+                      href={internship.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-red-600 hover:text-red-800 font-medium"
+                    >
+                      Apply Now →
+                    </a>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Results Count */}
+        <div className="mb-7">
+          <p className=" text-md font-large   text-white">
+            Showing {filteredInternships.length} of {internships.length} internships
+          </p>
+        </div>
+
+        {/* Internships Grid */}
+        {filteredInternships.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-center py-16"
+          >
+            <BriefcaseIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No internships found</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Try adjusting your search or filters</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedFilters({
+                  companies: [],
+                  modes: [],
+                  types: [],
+                  sectors: [],
+                  durations: [],
+                  skills: []
+                });
+              }}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </motion.div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filteredInternships.map((internship, index) => {
+              const daysUntilDeadline = getDaysUntilDeadline(internship.deadline);
+              const isUrgent = daysUntilDeadline <= 7 && daysUntilDeadline > 0;
+              
+              return (
+                <motion.div
+                  key={internship.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 border border-gray-200 dark:border-white"
+                >
+                  {/* Header */}
+                  <div className="p-6 border-b border-gray-100">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="text-lg font-semibold text-white line-clamp-2">
+                        {internship.title}
+                      </h3>
+                      {user && (
+                        <button
+                          onClick={() => toggleBookmark(internship.id)}
+                          className="text-gray-400 hover:text-yellow-500 transition-colors"
+                        >
+                          {internship.isBookmarked ? <FaBookmark className="text-yellow-500" /> : <FaRegBookmark />}
+                        </button>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center text-sm text-white mb-2">
+                      <FaBuilding className="mr-1" />
+                      {internship.company}
+                    </div>
+
+                    <div className="flex items-center text-sm text-gray-300 mb-3">
+                      <MdAccessTime className="mr-1" />
+                      Deadline: {new Date(internship.deadline).toLocaleDateString()}
+                    </div>
+
+                    {/* Badges */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(internship.type)}`}>
+                        {internship.type}
+                      </span>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getSectorColor(internship.sector)}`}>
+                        {internship.sector}
+                      </span>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getModeColor(internship.mode)}`}>
+                        {internship.mode}
+                      </span>
+                      {isUrgent && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                          Urgent
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Custom Badges */}
+                    {internship.badges.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {internship.badges.map(badge => (
+                          <span key={badge} className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Details */}
+                  <div className="p-6">
+                    <div className="space-y-3 mb-4">
+                      <div className="flex items-center text-sm text-gray-300">
+                        {internship.mode === 'remote' ? (
+                          <MdComputer className="mr-2 text-green-500" />
+                        ) : (
+                          <MdLocationOn className="mr-2 text-blue-500" />
+                        )}
+                        {internship.location}
+                      </div>
+                      
+                      <div className="flex items-center text-sm text-gray-300">
+                        <FaMoneyBillWave className="mr-2" />
+                        {internship.stipend}
+                      </div>
+
+                        <div className="flex items-center text-sm text-gray-300">
+                        <MdWork className="mr-2" />
+                        {internship.duration}
+                      </div>
+
+                      {isUrgent && (
+                            <div className="flex items-center text-sm text-gray-300 font-medium">
+                          <FaClock className="mr-2" />
+                          {daysUntilDeadline} day{daysUntilDeadline !== 1 ? 's' : ''} left to apply
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Skills */}
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-gray-300 mb-2">Skills Required:</h4>
+                      <div className="flex flex-wrap gap-1">
+                        {internship.skills.map(skill => (
+                          <span key={skill} className="inline-block px-2 py-1 text-xs bg-gray-600 text-gray-100 rounded">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-gray-300 mb-4 line-clamp-2">
+                      {internship.description}
+                    </p>
+
+                    {/* Actions */}
+                    <div className="flex gap-2">
+                      <a
+                        href={internship.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        Apply Now
+                      </a>
+                      {user && (
+                        <button
+                          onClick={() => toggleBookmark(internship.id)}
+                          className={`px-3 py-2 rounded-md border text-sm font-medium transition-colors ${
+                            internship.isBookmarked
+                              ? 'border-yellow-300 bg-yellow-50 text-yellow-700'
+                              : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`}
+                        >
+                          {internship.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Internships; 
