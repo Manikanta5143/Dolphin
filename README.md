@@ -7,7 +7,7 @@ College students often struggle to find opportunities like hackathons, internshi
 Event Aggregator solves this by providing a centralized platform where students can discover, filter, and bookmark opportunities based on their interests and deadlines.
 
 
-# Event Aggregator - College Student Opportunity Portal
+# Dolphin - College Student Opportunity Portal
 
 A full-stack web application that aggregates and displays various opportunities for college students including hackathons, coding competitions, internships, workshops, and conferences.
 
