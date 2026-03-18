@@ -1,3 +1,12 @@
+## 🎯 Problem Statement
+
+College students often struggle to find opportunities like hackathons, internships, and workshops in one centralized platform. Information is scattered across multiple sources, making it difficult to track and apply on time.
+
+## 💡 Solution
+
+Event Aggregator solves this by providing a centralized platform where students can discover, filter, and bookmark opportunities based on their interests and deadlines.
+
+
 # Event Aggregator - College Student Opportunity Portal
 
 A full-stack web application that aggregates and displays various opportunities for college students including hackathons, coding competitions, internships, workshops, and conferences.
