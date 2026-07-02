@@ -93,7 +93,7 @@ const CategoryTrendingEvents = () => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className=" border border-gray-300 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, index) => (
           <div key={index} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <LoadingSkeleton className="h-4 w-3/4 mb-2" />
@@ -129,10 +129,10 @@ const CategoryTrendingEvents = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {categories.map((category) => {
         const event = trendingEvents[category];
-        
+
         if (!event) {
           return (
-            <div key={category} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center">
+            <div key={category} className=" border-2 border-gray-400 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center">
               <div className="text-4xl mb-3">{getEventTypeIcon(category)}</div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                 {category.replace('_', ' ')}
@@ -145,7 +145,7 @@ const CategoryTrendingEvents = () => {
         }
 
         return (
-          <div key={category} className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200 dark:border-gray-700">
+          <div key={category} className=" border-2 border-gray-400 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200 dark:border-gray-700">
             <Link to={`/events/${event._id}`} className="block">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -210,7 +210,7 @@ const CategoryTrendingEvents = () => {
                   <span className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm transition-colors">
                     View Details →
                   </span>
-                  
+
                   {event.link && (
                     <a
                       href={event.link}

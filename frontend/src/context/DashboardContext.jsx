@@ -129,10 +129,22 @@ export const DashboardProvider = ({ children }) => {
 
   // Auto-fetch dashboard when context is first used
   useEffect(() => {
-    if (!state.dashboard && !state.loading && !state.error) {
+    const token = localStorage.getItem('token');
+    if (token && !state.dashboard && !state.loading && !state.error) {
       fetchDashboard();
     }
   }, []);
+
+  // Listen for global bookmark updates
+  useEffect(() => {
+    const handleBookmarkUpdate = () => {
+      if (state.dashboard) {
+        fetchWidget('bookmarks');
+      }
+    };
+    window.addEventListener('bookmarkUpdated', handleBookmarkUpdate);
+    return () => window.removeEventListener('bookmarkUpdated', handleBookmarkUpdate);
+  }, [state.dashboard]);
 
   const value = {
     ...state,

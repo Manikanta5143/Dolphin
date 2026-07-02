@@ -93,7 +93,8 @@ class RecommendationService {
           event,
           score: score.total,
           reasons: score.reasons,
-          breakdown: score.breakdown
+          breakdown: score.breakdown,
+          isFlagship: score.isFlagship
         });
       }
     }
@@ -141,6 +142,21 @@ class RecommendationService {
       }
     }
 
+    // Flagship / Top Company Boost
+    const topCompanies = ['google', 'microsoft', 'amazon', 'meta', 'apple', 'tesla'];
+    const isTopCompany = event.tags?.some(t => topCompanies.includes(t.toLowerCase())) 
+      || (event.organizer && topCompanies.some(c => event.organizer.toLowerCase().includes(c)));
+    
+    if (isTopCompany || event.type === 'HACKATHON') {
+      const isFlagship = isTopCompany && event.type === 'HACKATHON';
+      breakdown.tagMatch += isFlagship ? 0.3 : 0.1;
+      
+      if (isFlagship) {
+        reasons.unshift('Flagship Opportunity'); // Add to start of reasons!
+        this.isFlagshipEvent = true; // Use a temp flag just for UI, though UI doesn't strictly have a direct way to receive this without modifying the response schema
+      }
+    }
+
     // 3. Recency score (boost for recently added events)
     const daysSinceCreated = (new Date() - event.createdAt) / (1000 * 60 * 60 * 24);
     if (daysSinceCreated <= 7) {
@@ -176,10 +192,13 @@ class RecommendationService {
 
     const total = Object.values(breakdown).reduce((sum, value) => sum + value, 0);
 
+    const isFlagship = reasons.includes('Flagship Opportunity');
+
     return {
       total,
       breakdown,
-      reasons
+      reasons,
+      isFlagship
     };
   }
 

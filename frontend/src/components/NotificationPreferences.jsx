@@ -60,7 +60,7 @@ const NotificationPreferences = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-gray-300 rounded-lg shadow-sm border border-gray-200 p-6">
       <div className="flex items-center space-x-3 mb-6">
         <FaBell className="h-6 w-6 text-blue-600" />
         <h2 className="text-xl font-semibold text-gray-900">Notification Preferences</h2>

@@ -81,10 +81,12 @@ const EventDetail = () => {
       if (isBookmarked) {
         await eventService.removeBookmark(id)
         setIsBookmarked(false)
+        window.dispatchEvent(new Event('bookmarkUpdated'))
         toast.success('Bookmark removed')
       } else {
         await eventService.addBookmark(id)
         setIsBookmarked(true)
+        window.dispatchEvent(new Event('bookmarkUpdated'))
         toast.success('Event bookmarked')
       }
     } catch (error) {

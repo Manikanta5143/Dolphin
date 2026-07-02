@@ -180,32 +180,13 @@ const getDashboardWidgets = asyncHandler(async (req, res) => {
   }
 });
 
+const recommendationService = require('../services/recommendationService');
+
 // Helper functions
 async function getRecommendations(userId, options = {}) {
   try {
-    // This would use the recommendation service
-    // For now, return mock data
-    const events = await Event.find({
-      isActive: true,
-      status: 'published',
-      date: { $gte: new Date() }
-    })
-    .sort({ 'engagement.trendingScore': -1 })
-    .limit(options.limit || 6);
-    
-    return {
-      data: events.map(event => ({
-        event,
-        score: Math.random(),
-        reasons: ['Matches your interests', 'Similar to bookmarked events'],
-        breakdown: {
-          tagMatch: 0.4,
-          bookmarkSimilarity: 0.3,
-          recency: 0.2,
-          trending: 0.1
-        }
-      }))
-    };
+    const recommendations = await recommendationService.getRecommendations(userId, options);
+    return { data: recommendations };
   } catch (error) {
     console.error('Error getting recommendations:', error);
     return { data: [] };

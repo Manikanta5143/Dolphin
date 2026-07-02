@@ -77,8 +77,13 @@ const RecommendationCard = ({
   return (
     <div className="relative bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200 dark:border-gray-700">
       {/* Recommendation Badge */}
-      <div className="absolute top-2 right-2 z-10">
-        <div className="flex items-center space-x-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-xs font-medium">
+      <div className="absolute top-2 right-2 z-10 flex flex-col items-end space-y-1">
+        {recommendation.isFlagship && (
+          <div className="flex items-center space-x-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full text-xs font-bold shadow-sm">
+            <span>🚀 Flagship</span>
+          </div>
+        )}
+        <div className="flex items-center space-x-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full text-xs font-medium shadow-sm">
           <SparklesIcon className="w-3 h-3" />
           <span>Recommended</span>
         </div>

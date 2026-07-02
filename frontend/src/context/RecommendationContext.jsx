@@ -126,7 +126,8 @@ export const RecommendationProvider = ({ children }) => {
 
   // Auto-fetch recommendations when context is first used
   useEffect(() => {
-    if (state.recommendations.length === 0 && !state.loading && !state.error) {
+    const token = localStorage.getItem('token');
+    if (token && state.recommendations.length === 0 && !state.loading && !state.error) {
       fetchRecommendations();
     }
   }, []);

@@ -12,6 +12,11 @@ const eventSchema = new mongoose.Schema({
     required: [true, 'Please provide a description'],
     maxlength: [1000, 'Description cannot be more than 1000 characters']
   },
+  organizer: {
+    type: String,
+    trim: true,
+    maxlength: [100, 'Organizer cannot be more than 100 characters']
+  },
   type: {
     type: String,
     required: [true, 'Please provide an event type'],
@@ -248,7 +253,7 @@ eventSchema.methods.incrementAttendance = function() {
 eventSchema.methods.updateTrendingScore = function() {
   // Calculate trending score based on recent activity
   const engagement = this.engagement;
-  const weights = {
+  let weights = {
     view: 1,
     bookmark: 3,
     share: 5,
@@ -256,13 +261,23 @@ eventSchema.methods.updateTrendingScore = function() {
     attendance: 6
   };
   
-  this.engagement.trendingScore = 
+  let baseScore = 
     (engagement.viewCount * weights.view) +
     (engagement.bookmarkCount * weights.bookmark) +
     (engagement.shareCount * weights.share) +
     (engagement.rsvpCount * weights.rsvp) +
     (engagement.attendanceCount * weights.attendance);
-  
+
+  // Boost for top companies
+  const topCompanies = ['google', 'microsoft', 'amazon', 'meta', 'apple', 'tesla'];
+  const hasTopCompany = this.tags?.some(t => topCompanies.includes(t.toLowerCase())) 
+                     || (this.organizer && topCompanies.some(c => this.organizer.toLowerCase().includes(c)));
+                     
+  if (hasTopCompany) {
+    baseScore *= 1.5; // 50% boost for top companies to prioritize them
+  }
+
+  this.engagement.trendingScore = baseScore;
   return this;
 };
 

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BellIcon, 
-  FunnelIcon, 
-  MagnifyingGlassIcon, 
-  TrashIcon, 
-  CheckIcon, 
-  ExclamationTriangleIcon, 
-  InformationCircleIcon, 
-  TrophyIcon, 
-  UserGroupIcon, 
-  CalendarIcon 
+import {
+  BellIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+  TrashIcon,
+  CheckIcon,
+  ExclamationTriangleIcon,
+  InformationCircleIcon,
+  TrophyIcon,
+  UserGroupIcon,
+  CalendarIcon
 } from '@heroicons/react/24/outline';
 import { useNotification } from '../context/NotificationContext';
 import NotificationItem from '../components/NotificationItem';
@@ -18,20 +18,20 @@ import NotificationPreferences from '../components/NotificationPreferences';
 import toast from 'react-hot-toast';
 
 const Notifications = () => {
-  const { 
-    notifications, 
-    unreadCount, 
-    loading, 
+  const {
+    notifications,
+    unreadCount,
+    loading,
     error,
     initialized,
-    fetchNotifications, 
-    markAllAsRead, 
-    deleteNotification 
+    fetchNotifications,
+    markAllAsRead,
+    deleteNotification
   } = useNotification();
-  
+
   // Fallback state for when context is stuck
   const [fallbackMode, setFallbackMode] = useState(false);
-  
+
   const [activeTab, setActiveTab] = useState('all');
   const [showPreferences, setShowPreferences] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,7 +43,7 @@ const Notifications = () => {
   useEffect(() => {
     console.log('Notifications page mounted, fetching notifications...');
     fetchNotifications({ limit: 50 });
-    
+
     // Set a timeout to enable fallback mode if stuck
     const timeoutId = setTimeout(() => {
       if (!initialized && !loading) {
@@ -51,26 +51,26 @@ const Notifications = () => {
         setFallbackMode(true);
       }
     }, 15000); // 15 second timeout
-    
+
     return () => clearTimeout(timeoutId);
   }, []);
 
   const filteredNotifications = notifications.filter(notification => {
     // Tab filter
     if (activeTab === 'unread' && notification.isRead) return false;
-    
+
     // Search filter
-    if (searchTerm && !notification.title.toLowerCase().includes(searchTerm.toLowerCase()) && 
-        !notification.message.toLowerCase().includes(searchTerm.toLowerCase())) {
+    if (searchTerm && !notification.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !notification.message.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
-    
+
     // Type filter
     if (filterType !== 'all' && notification.type !== filterType) return false;
-    
+
     // Priority filter
     if (filterPriority !== 'all' && notification.priority !== filterPriority) return false;
-    
+
     return true;
   });
 
@@ -96,8 +96,8 @@ const Notifications = () => {
   };
 
   const handleSelectNotification = (notificationId) => {
-    setSelectedNotifications(prev => 
-      prev.includes(notificationId) 
+    setSelectedNotifications(prev =>
+      prev.includes(notificationId)
         ? prev.filter(id => id !== notificationId)
         : [...prev, notificationId]
     );
@@ -124,14 +124,14 @@ const Notifications = () => {
 
   const handleBulkMarkAsRead = async () => {
     try {
-      const unreadSelected = selectedNotifications.filter(id => 
+      const unreadSelected = selectedNotifications.filter(id =>
         !notifications.find(n => n._id === id)?.isRead
       );
-      
-      await Promise.all(unreadSelected.map(id => 
+
+      await Promise.all(unreadSelected.map(id =>
         fetch(`/api/notifications/${id}/read`, { method: 'PUT' })
       ));
-      
+
       setSelectedNotifications([]);
       setShowBulkActions(false);
       toast.success('Selected notifications marked as read');
@@ -161,13 +161,13 @@ const Notifications = () => {
               The notifications service is currently unavailable. This might be due to network issues or server problems.
             </p>
             <div className="space-x-4">
-              <button 
+              <button
                 onClick={() => window.location.reload()}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Try Again
               </button>
-              <button 
+              <button
                 onClick={() => setFallbackMode(false)}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
@@ -188,7 +188,7 @@ const Notifications = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Loading notifications...</h3>
             <p className="text-gray-500 dark:text-gray-400">Please wait while we fetch your notifications.</p>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -260,9 +260,9 @@ const Notifications = () => {
             <div className="flex items-center space-x-3">
               <button
                 onClick={() => setShowPreferences(!showPreferences)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-white dark:text-gray-300 bg-blue-600 dark:bg-gray-800 border border-blue-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
               >
-                Preferences
+                Notification Preferences
               </button>
               {unreadCount > 0 && (
                 <button
@@ -397,21 +397,19 @@ const Notifications = () => {
             <nav className="-mb-px flex space-x-8 px-6">
               <button
                 onClick={() => setActiveTab('all')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === 'all'
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
-                }`}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'all'
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
               >
                 All Notifications ({notifications.length})
               </button>
               <button
                 onClick={() => setActiveTab('unread')}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === 'unread'
-                    ? 'border-blue-500 text-blue-600 dark:text-wblue-400'
-                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
-                }`}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'unread'
+                  ? 'border-blue-500 text-blue-600 dark:text-wblue-400'
+                  : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
               >
                 Unread ({unreadCount})
               </button>
@@ -419,13 +417,17 @@ const Notifications = () => {
           </div>
 
           {/* Notifications List */}
-          <div className="divide-y divide-gray-200 dark:divide-white">
+          <div className="space-y-4">
             {filteredNotifications.length === 0 ? (
               <div className="p-12 text-center">
                 <BellIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No notifications</h3>
+                <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+                  No notifications
+                </h3>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  {activeTab === 'unread' ? 'You have no unread notifications.' : 'You have no notifications yet.'}
+                  {activeTab === 'unread'
+                    ? 'You have no unread notifications.'
+                    : 'You have no notifications yet.'}
                 </p>
               </div>
             ) : (
@@ -434,11 +436,14 @@ const Notifications = () => {
                   key={notification._id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.05 }}
-                  className="relative"
+                  whileHover={{ scale: 1.02, ease: "easeOut" }}
+                  transition={{ duration: 0.2 }}
+
+                  className="bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] backdrop-blur-md border border-gray-500 hover: border-2 hover: border-gray-100   hover: shadow-lg rounded-xl p-4 shadow-md hover:shadow-blue-500/10 hover:border-blue-500/40 transition-all duration-300"
                 >
+                  {/* Checkbox for bulk */}
                   {showBulkActions && (
-                    <div className="absolute left-4 top-4 z-10">
+                    <div className="absolute left-3 top-3 z-10">
                       <input
                         type="checkbox"
                         checked={selectedNotifications.includes(notification._id)}
@@ -447,12 +452,51 @@ const Notifications = () => {
                       />
                     </div>
                   )}
-                  <div className={showBulkActions ? 'pl-12' : ''}>
-                    <NotificationItem
-                      notification={notification}
-                      icon={getNotificationIcon(notification.type)}
-                      onClose={() => {}}
-                    />
+
+                  {/* Notification Content */}
+                  <div className={showBulkActions ? 'pl-8' : ''}>
+                    <div className="flex items-start justify-between gap-4">
+
+                      {/* LEFT: Icon + Content */}
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1">
+                          {getNotificationIcon(notification.type)}
+                        </div>
+
+                        <div>
+                          <h3 className="text-white font-semibold">
+                            {notification.title}
+                          </h3>
+
+                          <p className="text-gray-400 text-sm mt-1">
+                            {notification.message}
+                          </p>
+
+                          <span className="text-xs text-gray-500 mt-2 block">
+                            {new Date(notification.createdAt).toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* RIGHT: Actions */}
+                      <div className="flex items-center gap-3">
+                        {!notification.isRead && (
+                          <button
+                            onClick={() => fetch(`/api/notifications/${notification._id}/read`, { method: 'PUT' })}
+                            className="text-green-400 hover:text-green-300"
+                          >
+                            <CheckIcon className="w-4 h-4" />
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => deleteNotification(notification._id)}
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <TrashIcon className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               ))

@@ -103,12 +103,12 @@ const Home = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] dark:bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8]">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-800 via-gray-600 to-indigo-800 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-blue-900 via-gray-600 to-indigo-900 text-white overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-800/20 to-gray-800/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-800/80 to-gray-800/80"></div>
           <div className="absolute top-0 left-0 w-full h-full">
             <div className="absolute top-10 left-10 w-20 h-20 bg-white/10 rounded-full animate-pulse"></div>
             <div className="absolute top-32 right-20 w-16 h-16 bg-white/10 rounded-full animate-pulse delay-1000"></div>
@@ -119,13 +119,13 @@ const Home = () => {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium mb-6">
+            <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ duration: 0.6, delay: 0.2 }} className="inline-flex items-center px-4 py-2 bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] backdrop-blur-sm rounded-full text-sm font-medium mb-6">
               <SparklesIcon className="w-4 h-4 mr-2" /> Join 15,000+ Students Already Building Their Future
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
               Discover Your Next
-              <span className="block bg-gradient-to-r from-blue-500 to-gray-200 bg-clip-text text-transparent">Opportunity</span>
+              <span className="block bg-gradient-to-r from-blue-900 to-gray-100 bg-clip-text text-transparent">Opportunity</span>
             </h1>
 
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed">
@@ -133,20 +133,20 @@ const Home = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/events" className="bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-50 transition-all duration-300 shadow-xl flex items-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.1, ease: "easeOut" }}>
+                <Link to="/events" className=" bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 shadow-xl flex items-center hover:shadow-[0_0_60px_rgba(59,130,246,0.2)] hover:text-blue-500 hover:border-blue-500">
                   <FaSearch className="mr-2" /> Explore Events <ArrowRightIcon className="w-5 h-5 ml-2" />
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/register" className="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all duration-300 backdrop-blur-sm flex items-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={{ duration: 0.1, ease: "easeOut" }}>
+                <Link to="/register" className=" bg-gradient-to-br to-[#020617] via-[#0b1a3a] from-[#1d4ed8] border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 backdrop-blur-sm flex items-center hover:shadow-[0_0_60px_rgba(59,130,246,0.2)] hover:text-blue-500 hover:border-blue-500">
                   <FaRocket className="mr-2" /> Get Started Free
                 </Link>
               </motion.div>
             </div>
 
             {/* Stats */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               {[
                 { label: 'Active Events', value: stats.totalEvents, icon: CalendarIcon },
                 { label: 'Students', value: stats.activeUsers, icon: UserGroupIcon },
@@ -166,28 +166,28 @@ const Home = () => {
       </section>
 
       {/* Event Types */}
-      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="py-20 bg-white dark:bg-gray-900">
+      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="py-20 bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] dark:bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-100 dark:text-white mb-6">
               Explore Different <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Opportunities</span>
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
               From competitive hackathons to career-launching internships, find the perfect opportunity for your goals.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {eventTypes.map((eventType, index) => (
-              <motion.div key={eventType.type} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 * index }} whileHover={{ scale: 1.05, y: -5 }} className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden">
-                <div className={`absolute inset-0 bg-gradient-to-br ${eventType.color} opacity-10 group-hover:opacity-20 transition-opacity duration-300`}></div>
+              <motion.div key={eventType.type} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.1, ease: "easeInOut" }} whileHover={{ scale: 1.05, y: -5 }} className="text-white border-2 border-gray-600 hover:border-white hover:shadow-[0_0_60px_rgba(59,130,246,0.2)] group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-visible">
+                <div className={`absolute inset-0 bg-gradient-to-br ${eventType.color} opacity-10 group-hover:opacity-30 transition-opacity duration-300`}></div>
                 <div className="relative p-8">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-4xl">{eventType.icon}</span>
                     <span className="text-2xl font-bold text-gray-900 dark:text-white">{eventType.count}</span>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">{eventType.label}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  <p className="text-gray-600 dark:text-gray-100 mb-6">
                     {eventType.type === 'HACKATHON' && 'Build innovative solutions in competitive coding challenges.'}
                     {eventType.type === 'INTERNSHIP' && 'Gain real-world experience with top tech companies.'}
                     {eventType.type === 'WORKSHOP' && 'Learn new skills through hands-on training sessions.'}
@@ -195,7 +195,7 @@ const Home = () => {
                     {eventType.type === 'COMPETITION' && 'Participate in coding competitions and win prizes.'}
                     {eventType.type === 'MEETUP' && 'Connect with like-minded developers and professionals.'}
                   </p>
-                  
+
                 </div>
               </motion.div>
             ))}
@@ -206,7 +206,7 @@ const Home = () => {
       {/* Personalized Recommendations */}
 
       {/* Category Trending Events */}
-      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="border border-gray-300 dark:border-gray-600 py-20 bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 flex items-center justify-center">
@@ -219,7 +219,7 @@ const Home = () => {
       </motion.section>
 
       {/* MAANG Internships */}
-      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7 }} className="py-20 bg-white dark:bg-gray-900">
+      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7 }} className=" bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] border border-gray-300 py-20 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 flex items-center justify-center">
@@ -232,7 +232,7 @@ const Home = () => {
       </motion.section>
 
       {/* SDE Recommendations */}
-      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="py-20 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-800 dark:to-gray-900">
+      <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: "easeOut" }} className="bg-gradient-to-br from-[#020617] via-[#0b1a3a]  py-20 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 flex items-center justify-center">
@@ -244,8 +244,8 @@ const Home = () => {
         </div>
       </motion.section>
 
-      
-      
+
+
     </div>
   )
 }

@@ -8,10 +8,10 @@ import TrendingEvents from '../components/TrendingEvents';
 import Leaderboard from '../components/Leaderboard';
 import CountdownBadge from '../components/CountdownBadge';
 import ShareButton from '../components/ShareButton';
-import { 
-  StarIcon, 
-  TrophyIcon, 
-  BookmarkIcon, 
+import {
+  StarIcon,
+  TrophyIcon,
+  BookmarkIcon,
   ShareIcon,
   EyeIcon,
   UserGroupIcon,
@@ -20,12 +20,12 @@ import {
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { 
-    dashboard, 
-    loading, 
-    error, 
+  const {
+    dashboard,
+    loading,
+    error,
     fetchDashboard,
-    refreshWidget 
+    refreshWidget
   } = useDashboard();
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const Dashboard = () => {
                 <div className="h-4 w-96 bg-gray-200 dark:bg-gray-700 rounded" />
               </div>
             </div>
-            
+
             {/* Stats Grid Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {Array.from({ length: 4 }).map((_, index) => (
@@ -56,7 +56,7 @@ const Dashboard = () => {
                 </div>
               ))}
             </div>
-            
+
             {/* Content Grid Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {Array.from({ length: 4 }).map((_, index) => (
@@ -80,7 +80,7 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="min-h-screen bg-gray-500 dark:bg-gray-900 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="text-red-500 mb-4">
@@ -111,7 +111,7 @@ const Dashboard = () => {
   const { user: userData, stats, bookmarks, recommendations, trending, achievements, leaderboard } = dashboard;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -140,30 +140,30 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Points</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalPoints}</p>
-        </div>
-              <StarIcon className="w-8 h-8 text-yellow-500" />
-                </div>
               </div>
+              <StarIcon className="w-8 h-8 text-yellow-500" />
+            </div>
+          </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Level</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.level}</p>
-                </div>
-              <TrophyIcon className="w-8 h-8 text-blue-500" />
-                </div>
               </div>
+              <TrophyIcon className="w-8 h-8 text-blue-500" />
+            </div>
+          </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bookmarks</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.bookmarkedEvents}</p>
-                </div>
-              <BookmarkIcon className="w-8 h-8 text-green-500" />
               </div>
+              <BookmarkIcon className="w-8 h-8 text-green-500" />
             </div>
+          </div>
 
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between">
@@ -214,7 +214,7 @@ const Dashboard = () => {
                           </p>
                         </div>
                         <CountdownBadge event={event} size="sm" />
-                    </div>
+                      </div>
                     ))}
                   </div>
                 ) : (
@@ -223,11 +223,11 @@ const Dashboard = () => {
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       No bookmarked events yet
                     </p>
-                                  </div>
-                                )}
+                  </div>
+                )}
               </DashboardWidget>
             </motion.div>
-                              </div>
+          </div>
 
           {/* Right Column */}
           <div className="space-y-8">
@@ -264,10 +264,10 @@ const Dashboard = () => {
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             +{achievement.points} points
                           </p>
-                              </div>
-                            </div>
+                        </div>
+                      </div>
                     ))}
-                          </div>
+                  </div>
                 ) : (
                   <div className="text-center py-4">
                     <TrophyIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
@@ -287,10 +287,10 @@ const Dashboard = () => {
             >
               <Leaderboard limit={5} />
             </motion.div>
-              </div>
-            </div>
           </div>
         </div>
+      </div>
+    </div>
   );
 };
 

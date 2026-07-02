@@ -177,7 +177,8 @@ export const AchievementProvider = ({ children }) => {
 
   // Auto-fetch user achievements when context is first used
   useEffect(() => {
-    if (state.userAchievements.length === 0 && !state.loading && !state.error) {
+    const token = localStorage.getItem('token');
+    if (token && state.userAchievements.length === 0 && !state.loading && !state.error) {
       fetchUserAchievements();
     }
   }, []);

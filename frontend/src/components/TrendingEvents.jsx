@@ -182,6 +182,14 @@ const TrendingEvents = ({
 
                   {/* Event Details */}
                   <div className="space-y-2 mb-3">
+                    {event.organizer && (
+                      <div className="flex items-center text-sm text-gray-700 dark:text-gray-300 font-medium">
+                        <svg className="w-4 h-4 mr-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                        {event.organizer}
+                      </div>
+                    )}
                     {event.location && (
                       <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,6 +206,15 @@ const TrendingEvents = ({
                       </svg>
                       {format(new Date(event.date), 'MMM dd, yyyy')}
                     </div>
+
+                    {event.deadline && (
+                      <div className="flex items-center text-sm text-red-500 dark:text-red-400">
+                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Deadline: {format(new Date(event.deadline), 'MMM dd, yyyy')}
+                      </div>
+                    )}
                   </div>
 
                   {/* Engagement Stats */}
@@ -240,6 +257,25 @@ const TrendingEvents = ({
                           +{event.tags.length - 3} more
                         </span>
                       )}
+                    </div>
+                  )}
+
+                  {/* Participation Link */}
+                  {event.link && (
+                    <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700">
+                      <button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          window.open(event.link, '_blank');
+                        }}
+                        className="w-full inline-flex justify-center items-center px-4 py-2 bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 font-medium text-sm rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
+                      >
+                        Participate Here
+                        <svg className="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </button>
                     </div>
                   )}
                 </div>

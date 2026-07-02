@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   MagnifyingGlassIcon,
   FunnelIcon,
   BookmarkIcon,
@@ -212,14 +212,14 @@ const Hackathons = () => {
       setHackathons(sampleHackathons);
       setFilteredHackathons(sampleHackathons);
       setLoading(false);
-      
+
       // Extract unique filter options
       const organizers = [...new Set(sampleHackathons.map(h => h.organizer))];
       const modes = [...new Set(sampleHackathons.map(h => h.mode))];
       const scopes = [...new Set(sampleHackathons.map(h => h.scope))];
       const difficulties = [...new Set(sampleHackathons.map(h => h.difficulty))];
       const statuses = [...new Set(sampleHackathons.map(h => h.status))];
-      
+
       setFilters({
         organizers,
         mode: modes,
@@ -314,13 +314,13 @@ const Hackathons = () => {
       const hackathon = hackathons.find(h => h.id === hackathonId);
       if (hackathon.isBookmarked) {
         // Remove bookmark
-        setHackathons(prev => prev.map(h => 
+        setHackathons(prev => prev.map(h =>
           h.id === hackathonId ? { ...h, isBookmarked: false } : h
         ));
         toast.success('Bookmark removed');
       } else {
         // Add bookmark
-        setHackathons(prev => prev.map(h => 
+        setHackathons(prev => prev.map(h =>
           h.id === hackathonId ? { ...h, isBookmarked: true } : h
         ));
         toast.success('Hackathon bookmarked');
@@ -341,46 +341,47 @@ const Hackathons = () => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'beginner': return 'bg-green-500/20 text-green-300 border border-green-500/30';
+      case 'intermediate': return 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30';
+      case 'advanced': return 'bg-red-500/20 text-red-300 border border-red-500/30';
+      default: return 'bg-gray-500/20 text-gray-100 border border-gray-500/30';
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'open': return 'bg-green-100 text-green-800';
-      case 'closed': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'open': return 'bg-green-500/20 text-green-300 border border-green-500/30';
+      case 'closed': return 'bg-red-500/20 text-red-300 border border-red-500/30';
+      default: return 'bg-gray-500/20 text-gray-100 border border-gray-500/30';
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative min-h-screen py-8 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#020617]">
+        <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="space-y-6">
             {/* Header Skeleton */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-xl shadow-xl p-6">
               <div className="animate-pulse">
-                <div className="h-8 w-64 bg-gray-200 dark:bg-gray-700 rounded mb-4" />
-                <div className="h-4 w-96 bg-gray-200 dark:bg-gray-700 rounded" />
+                <div className="h-8 w-64 bg-white/10 rounded mb-4" />
+                <div className="h-4 w-96 bg-white/10 rounded" />
               </div>
             </div>
-            
+
             {/* Search and Filters Skeleton */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-xl shadow-xl p-6">
               <div className="animate-pulse">
-                <div className="h-10 w-full bg-gray-200 dark:bg-gray-700 rounded mb-4" />
+                <div className="h-10 w-full bg-white/10 rounded mb-4" />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {Array.from({ length: 4 }).map((_, index) => (
-                    <div key={index} className="h-10 bg-gray-200 dark:bg-gray-700 rounded" />
+                    <div key={index} className="h-10 bg-white/10 rounded" />
                   ))}
                 </div>
               </div>
             </div>
-            
+
             {/* Hackathons Grid Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, index) => (
@@ -394,27 +395,31 @@ const Hackathons = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen py-8 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#020617]">
+      <div className="absolute top-0 inset-x-0 h-96 bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8"
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          whileHover={{ scale: 1.05, y: -5 }}
+          className="bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] backdrop-blur-md border border-white/10 rounded-xl shadow-xl p-6 mb-8 hover:border-white hover:shadow-[0_0_90px_rgba(59,130,246,0.35)]"
         >
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center space-x-3">
-              <ComputerDesktopIcon className="h-8 w-8 text-blue-600" />
+              <div className="p-3 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg shadow-lg shadow-blue-500/20">
+                <ComputerDesktopIcon className="h-8 w-8 text-white" />
+              </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Hackathons</h1>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">Discover and participate in exciting hackathons</p>
+                <h1 className="text-3xl font-bold text-white tracking-tight">Hackathons</h1>
+                <p className="mt-2 text-gray-100">Discover and participate in exciting hackathons</p>
               </div>
             </div>
             <div className="mt-4 lg:mt-0">
               <div className="text-right">
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{filteredHackathons.length}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Available Hackathons</div>
+                <div className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">{filteredHackathons.length}</div>
+                <div className="text-sm text-gray-200 font-medium tracking-wide uppercase">Available Hackathons</div>
               </div>
             </div>
           </div>
@@ -425,31 +430,31 @@ const Hackathons = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8"
+          className="bg-[#1e293b]/80 backdrop-blur-md border border-white/10 rounded-xl shadow-xl p-6 mb-8"
         >
           {/* Search Bar */}
           <div className="relative mb-6">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-200" />
             </div>
             <input
               type="text"
               placeholder="Search hackathons by name, organizer, or tags..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+              className="block w-full pl-10 pr-3 py-4 border border-white/10 rounded-xl leading-5 bg-black/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-inner backdrop-blur-sm"
             />
           </div>
 
           {/* Filter Toggle */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-              <FunnelIcon className="w-5 h-5 mr-2" />
+            <h3 className="text-lg font-semibold text-white flex items-center">
+              <FunnelIcon className="w-5 h-5 mr-2 text-blue-400" />
               Filters
             </h3>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 hover:bg-blue-500/20 rounded-lg"
             >
               {showFilters ? 'Hide Filters' : 'Show Filters'}
             </button>
@@ -459,13 +464,13 @@ const Hackathons = () => {
           {(Object.values(selectedFilters).some(f => f.length > 0) || searchTerm) && (
             <div className="mb-4">
               <div className="flex flex-wrap gap-2 items-center">
-                <span className="text-sm font-medium text-gray-700">Active filters:</span>
+                <span className="text-sm font-medium text-gray-200">Active filters:</span>
                 {searchTerm && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-500/20 text-blue-200 border border-blue-500/30">
                     Search: "{searchTerm}"
                     <button
                       onClick={() => setSearchTerm('')}
-                      className="ml-2 text-blue-600 hover:text-blue-800"
+                      className="ml-2 text-blue-400 hover:text-blue-300"
                     >
                       ×
                     </button>
@@ -473,11 +478,11 @@ const Hackathons = () => {
                 )}
                 {Object.entries(selectedFilters).map(([filterType, values]) =>
                   values.map(value => (
-                    <span key={`${filterType}-${value}`} className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-800">
+                    <span key={`${filterType}-${value}`} className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-white/10 text-gray-200 border border-white/20">
                       {filterType}: {value}
                       <button
                         onClick={() => toggleFilter(filterType, value)}
-                        className="ml-2 text-gray-600 hover:text-gray-800"
+                        className="ml-2 text-gray-200 hover:text-gray-200"
                       >
                         ×
                       </button>
@@ -486,7 +491,7 @@ const Hackathons = () => {
                 )}
                 <button
                   onClick={clearAllFilters}
-                  className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                  className="text-sm text-blue-400 hover:text-blue-300 font-medium"
                 >
                   Clear all
                 </button>
@@ -496,21 +501,21 @@ const Hackathons = () => {
 
           {/* Filter Panel */}
           {showFilters && (
-            <div className="bg-white rounded-lg shadow-sm border p-6 mb-6">
+            <div className="bg-black/20 backdrop-blur-sm rounded-xl border border-white/10 p-6 mb-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {/* Organizers */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">Organizers</h3>
-                  <div className="space-y-2">
+                  <h3 className="text-sm font-medium text-gray-100 mb-3 uppercase tracking-wider">Organizers</h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto pr-2 custom-scrollbar">
                     {filters.organizers.map(organizer => (
-                      <label key={organizer} className="flex items-center">
+                      <label key={organizer} className="flex items-center group cursor-pointer">
                         <input
                           type="checkbox"
                           checked={selectedFilters.organizers.includes(organizer)}
                           onChange={() => toggleFilter('organizers', organizer)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          className="rounded border-white/20 bg-black/30 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
                         />
-                        <span className="ml-2 text-sm text-gray-700">{organizer}</span>
+                        <span className="ml-2 text-sm text-gray-200 group-hover:text-gray-200 transition-colors">{organizer}</span>
                       </label>
                     ))}
                   </div>
@@ -518,17 +523,17 @@ const Hackathons = () => {
 
                 {/* Mode */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">Mode</h3>
+                  <h3 className="text-sm font-medium text-gray-100 mb-3 uppercase tracking-wider">Mode</h3>
                   <div className="space-y-2">
                     {filters.mode.map(mode => (
-                      <label key={mode} className="flex items-center">
+                      <label key={mode} className="flex items-center group cursor-pointer">
                         <input
                           type="checkbox"
                           checked={selectedFilters.mode.includes(mode)}
                           onChange={() => toggleFilter('mode', mode)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          className="rounded border-white/20 bg-black/30 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
                         />
-                        <span className="ml-2 text-sm text-gray-700 capitalize">{mode}</span>
+                        <span className="ml-2 text-sm text-gray-200 group-hover:text-gray-200 transition-colors capitalize">{mode}</span>
                       </label>
                     ))}
                   </div>
@@ -536,17 +541,17 @@ const Hackathons = () => {
 
                 {/* Scope */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">Scope</h3>
+                  <h3 className="text-sm font-medium text-gray-100 mb-3 uppercase tracking-wider">Scope</h3>
                   <div className="space-y-2">
                     {filters.scope.map(scope => (
-                      <label key={scope} className="flex items-center">
+                      <label key={scope} className="flex items-center group cursor-pointer">
                         <input
                           type="checkbox"
                           checked={selectedFilters.scope.includes(scope)}
                           onChange={() => toggleFilter('scope', scope)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          className="rounded border-white/20 bg-black/30 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
                         />
-                        <span className="ml-2 text-sm text-gray-700 capitalize">{scope}</span>
+                        <span className="ml-2 text-sm text-gray-200 group-hover:text-gray-200 transition-colors capitalize">{scope}</span>
                       </label>
                     ))}
                   </div>
@@ -554,17 +559,17 @@ const Hackathons = () => {
 
                 {/* Difficulty */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">Difficulty</h3>
+                  <h3 className="text-sm font-medium text-gray-100 mb-3 uppercase tracking-wider">Difficulty</h3>
                   <div className="space-y-2">
                     {filters.difficulty.map(difficulty => (
-                      <label key={difficulty} className="flex items-center">
+                      <label key={difficulty} className="flex items-center group cursor-pointer">
                         <input
                           type="checkbox"
                           checked={selectedFilters.difficulty.includes(difficulty)}
                           onChange={() => toggleFilter('difficulty', difficulty)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          className="rounded border-white/20 bg-black/30 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
                         />
-                        <span className="ml-2 text-sm text-gray-700 capitalize">{difficulty}</span>
+                        <span className="ml-2 text-sm text-gray-200 group-hover:text-gray-200 transition-colors capitalize">{difficulty}</span>
                       </label>
                     ))}
                   </div>
@@ -572,17 +577,17 @@ const Hackathons = () => {
 
                 {/* Status */}
                 <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">Status</h3>
+                  <h3 className="text-sm font-medium text-gray-100 mb-3 uppercase tracking-wider">Status</h3>
                   <div className="space-y-2">
                     {filters.status.map(status => (
-                      <label key={status} className="flex items-center">
+                      <label key={status} className="flex items-center group cursor-pointer">
                         <input
                           type="checkbox"
                           checked={selectedFilters.status.includes(status)}
                           onChange={() => toggleFilter('status', status)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                          className="rounded border-white/20 bg-black/30 text-blue-500 focus:ring-blue-500 focus:ring-offset-gray-900"
                         />
-                        <span className="ml-2 text-sm text-gray-700 capitalize">{status}</span>
+                        <span className="ml-2 text-sm text-gray-200 group-hover:text-gray-200 transition-colors capitalize">{status}</span>
                       </label>
                     ))}
                   </div>
@@ -594,7 +599,7 @@ const Hackathons = () => {
 
         {/* Results Count */}
         <div className="mb-6">
-          <p className="text-gray-600">
+          <p className="text-gray-300">
             Showing {filteredHackathons.length} of {hackathons.length} hackathons
           </p>
         </div>
@@ -607,9 +612,9 @@ const Hackathons = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-center py-16"
           >
-            <ComputerDesktopIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No hackathons found</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">Try adjusting your search or filters</p>
+            <ComputerDesktopIcon className="w-16 h-16 text-gray-200 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-white mb-2">No hackathons found</h3>
+            <p className="text-gray-300  mb-6">Try adjusting your search or filters</p>
             <button
               onClick={() => {
                 setSearchTerm('');
@@ -636,37 +641,38 @@ const Hackathons = () => {
             {filteredHackathons.map((hackathon, index) => {
               const daysUntilDeadline = getDaysUntilDeadline(hackathon.deadline);
               const isUrgent = daysUntilDeadline <= 3 && daysUntilDeadline > 0;
-              
+
               return (
                 <motion.div
                   key={hackathon.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.1 }}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 border border-gray-200 dark:border-white"
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.05, ease: "easeOut" }}
+                  className="bg-gradient-to-br from-[#020617] via-[#0b1a3a] to-[#1d4ed8] backdrop-blur-sm rounded-xl shadow-md hover:shadow-[0_0_90px_rgba(59,130,246,0.2)] hover:-translate-y-1 hover:scale-[.98] transition-all duration-300 border border-white/50 group flex flex-col hover:z-20 hover:border-white"
                 >
                   {/* Header */}
-                  <div className="p-6 border-b border-gray-100 dark:border-gray-700">
+                  <div className="p-6 border-b border-white/10 flex-1">
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
+                      <h3 className="text-lg font-semibold text-white line-clamp-2">
                         {hackathon.title}
                       </h3>
                       {user && (
                         <button
                           onClick={() => toggleBookmark(hackathon.id)}
-                          className="text-gray-400 hover:text-blue-600 transition-colors"
+                          className="text-gray-200 hover:text-yellow-500 transition-colors"
                         >
-                          <BookmarkIcon className={`w-5 h-5 ${hackathon.isBookmarked ? 'text-blue-600 fill-current' : ''}`} />
+                          <BookmarkIcon className={`w-5 h-5 ${hackathon.isBookmarked ? 'text-yellow-500 fill-current' : ''}`} />
                         </button>
                       )}
                     </div>
-                    
-                    <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-2">
+
+                    <div className="flex items-center text-sm text-gray-100 mb-2">
                       <BuildingOfficeIcon className="w-4 h-4 mr-2" />
                       {hackathon.organizer}
                     </div>
 
-                    <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 mb-3">
+                    <div className="flex items-center text-sm text-gray-200 mb-3">
                       <CalendarIcon className="w-4 h-4 mr-2" />
                       {new Date(hackathon.date).toLocaleDateString()}
                     </div>
@@ -674,7 +680,7 @@ const Hackathons = () => {
                     {/* Tags */}
                     <div className="flex flex-wrap gap-1 mb-3">
                       {hackathon.tags.map(tag => (
-                        <span key={tag} className="inline-block px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded">
+                        <span key={tag} className="inline-block px-2 py-1 text-xs bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-md">
                           #{tag}
                         </span>
                       ))}
@@ -689,7 +695,7 @@ const Hackathons = () => {
                         {hackathon.status}
                       </span>
                       {isUrgent && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">
                           Urgent
                         </span>
                       )}
@@ -699,7 +705,7 @@ const Hackathons = () => {
                   {/* Details */}
                   <div className="p-6">
                     <div className="space-y-3 mb-4">
-                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center text-sm text-gray-100">
                         {hackathon.mode === 'online' ? (
                           <ComputerDesktopIcon className="w-4 h-4 mr-2 text-green-500" />
                         ) : (
@@ -707,31 +713,31 @@ const Hackathons = () => {
                         )}
                         {hackathon.location}
                       </div>
-                      
-                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+
+                      <div className="flex items-center text-sm text-gray-100">
                         <GlobeAltIcon className="w-4 h-4 mr-2" />
                         {hackathon.scope} scope
                       </div>
 
                       {isUrgent && (
-                        <div className="flex items-center text-sm text-red-600 dark:text-red-400 font-medium">
+                        <div className="flex items-center text-sm text-red-400 font-medium">
                           <ClockIcon className="w-4 h-4 mr-2" />
                           {daysUntilDeadline} day{daysUntilDeadline !== 1 ? 's' : ''} left to register
                         </div>
                       )}
                     </div>
 
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
+                    <p className="text-sm text-gray-200 mb-4 line-clamp-2">
                       {hackathon.description}
                     </p>
 
                     {/* Actions */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 mt-auto">
                       <a
                         href={hackathon.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                        className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 shadow-lg shadow-blue-500/20 text-white text-center py-2.5 px-4 rounded-lg transition-all duration-300 hover:scale-[1.02] text-sm font-medium"
                       >
                         Register Now
                       </a>
